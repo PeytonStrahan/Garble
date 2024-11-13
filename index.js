@@ -11,13 +11,17 @@ $(document).ready(() => {
     $tweetsContainer.html(''); // clear the tweets container div
     const $tweets = streams.home.map((tweet) => { // create an array of tweet divs
       const $tweet = $('<div></div>'); // create the tweet div
+      // const username = $(`<div>@${tweet.user}:</div>`); // create the username div
+      // const message = $(`<div> ${tweet.message}</div>`); // create the message div
+      
       const text = `@${tweet.user}: ${tweet.message}`; // put the current tweet's author (user) and message into the div
   
       $tweet.text(text);
 
-      const $timestamp = $('<div><div>').addClass('timestamp'); // create a div for the timestamp
-      let relTimestamp = moment(tweet.created_at).fromNow(); // use moment to get a relative timestamp from the created_at property of the current tweet object and then put it into the timestamp div
-      $timestamp.text(relTimestamp);
+      const $timestamp = $('<div></div>').addClass('timestamp'); // create a div for the timestamp
+      const formTimestamp = moment(tweet.created_at).format('MMMM DD, YYYY LT'); // use moment to create and format a timestamp (date and time) derived from the current tweet object's created_at property
+      const relTimestamp = moment(tweet.created_at).fromNow(); // use moment to get a relative timestamp from the created_at property of the current tweet object
+      $timestamp.text(`${formTimestamp} (${relTimestamp})`); // apply both the formatted timestamp and the relative timestamp to the timestamp div
       $tweet.append($timestamp); // append the timestamp div to the tweet div
   
       return $tweet;
