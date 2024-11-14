@@ -8,6 +8,8 @@ $(document).ready(() => {
   $body.append($refreshButton);
   const $homeButton = $('<button>Home (show all tweets)</button>'); //.width('100').height('40'); // create a home button to allow to switch back to the home stream (includes all tweets) and to refresh
   $body.append($homeButton);
+  const $messageInputForm = $('<form></form>').css('background-color', 'darkgray'); // create a form that allows users to post messages that will show up in the stream
+  $body.append($messageInputForm);
   const $tweetsContainer = $('<div></div>').css('background-color', 'green'); //.attr('id', 'tweets-container'); // create a container div to separate the tweets from the rest of the body
   $body.append($tweetsContainer);
   let streamSource = streams.home; // create a stream source variable that is set to the array of tweets in home by default (this array includes all tweets by all users)
@@ -53,6 +55,26 @@ $(document).ready(() => {
   };
 
   refresh(); // initial use of refresh function to prevent empty page on start up
+
+  const addInputMessage = function(inputName, inputMessage) { // create a function that takes in a name and a message, creates a tweet object, creates a user property in streams.users (if it doesn't already exist), pushes the tweet to both the array in the newly created user property in streams.users and the array in streams.home
+    console.log(arguments);
+    window.visitor = inputName;
+    // const tweet = {
+    //   user: 1,
+    //   message: 1,
+    //   created_at: 1
+    // };
+    // addTweet(tweet);
+    writeTweet(inputMessage);
+  };
+
+  $messageInputForm.append('<label for="inputName">Name:</label><br>', '<input type="text" id="inputName" name="inputName"><br><br>', '<label for="inputMessage">Message:</label><br>', '<textarea type="text" id="inputMessage" name="inputMessage"></textarea><br><br>', '<input type="submit" id="submit" value="Submit">'); // populate the input form with various input fields
+
+  $messageInputForm.attr('onSubmit', 'return false'); // prevent the submit button from refreshing the page
+
+  $('#submit').on('click', function() { // give the submit button the ability to call the addInputMessage function (when clicked) using the values in the message input form as arguments
+    addInputMessage($('#inputName').val(), $('#inputMessage').val());
+  });
 
   $refreshButton.on('click', function() { // give the refresh button the ability to refresh the current stream's tweets when clicked
     refresh(streamSource);

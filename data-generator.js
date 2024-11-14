@@ -18,6 +18,9 @@ const users = Object.keys(streams.users);
 // Utility function for adding tweets to our data structures
 const addTweet = (newTweet) => {
   const username = newTweet.user;
+  if (streams.users[username] === undefined) {
+    streams.users[username] = [];
+  }
   streams.users[username].push(newTweet);
   streams.home.push(newTweet);
 };
@@ -77,6 +80,7 @@ const writeTweet = (message) => {
   const tweet = {
     user: visitor,
     message: message,
+    created_at: new Date(),
   };
   addTweet(tweet);
 };
