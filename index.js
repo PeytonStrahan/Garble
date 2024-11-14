@@ -56,19 +56,29 @@ $(document).ready(() => {
 
   refresh(); // initial use of refresh function to prevent empty page on start up
 
-  const addInputMessage = function(inputName, inputMessage) { // create a function that takes in a name and a message, creates a tweet object, creates a user property in streams.users (if it doesn't already exist), pushes the tweet to both the array in the newly created user property in streams.users and the array in streams.home
-    console.log(arguments);
-    window.visitor = inputName;
-    // const tweet = {
-    //   user: 1,
-    //   message: 1,
-    //   created_at: 1
-    // };
-    // addTweet(tweet);
-    writeTweet(inputMessage);
+  const addInputMessage = function(inputName, inputMessage) { // pushes a new user-created tweet to both streams
+    window.visitor = inputName; // sets the global visitor property to the input name (is used in writeTweet function)
+    if(streams.users[inputName] === undefined) { // creates a property in streams.users from inputName and assigns it to an empty array if said property doesn't already exist
+      streams.users[inputName] = [];
+    }
+    writeTweet(inputMessage); // calls writeTweet utility function with the input message to create and push a new tweet to both streams
+    const timestamp = new Date(); // create a new timestamp to give the new tweet
+    // While it is probably safe to just instantly modify the last object in streams.home, a loop is used here in case a randomized tweet is somehow made before the loop runs and after the user-made tweet is added to stream.home.
+    for (let i = streams.home.length - 1; i >= 0; i--) { // loop backward through streams.home to find the last tweet made with a user property equal to the input name
+      if (streams.home[i].user === inputName) { // if the names match,...
+        streams.home[i].created_at = timestamp; // then give that tweet object a created_at property (used for timestamp)
+        break; // stop the loop
+      }
+    }
+    // Since the new property in streams.users is not affected by the random tweet generator, we can just modify the last tweet in the property's array to have a created_at property (timestamp).
+    streams.users[inputName][streams.users[inputName].length - 1].created_at = timestamp;
   };
 
-  $messageInputForm.append('<label for="inputName">Name:</label><br>', '<input type="text" id="inputName" name="inputName"><br><br>', '<label for="inputMessage">Message:</label><br>', '<textarea type="text" id="inputMessage" name="inputMessage"></textarea><br><br>', '<input type="submit" id="submit" value="Submit">'); // populate the input form with various input fields
+  $messageInputForm.append('<label for="inputName">Name:</label><br>',
+    '<input type="text" id="inputName" name="inputName"><br><br>',
+    '<label for="inputMessage">Message:</label><br>',
+    '<textarea type="text" id="inputMessage" name="inputMessage"></textarea><br><br>',
+    '<input type="submit" id="submit" value="Submit">'); // populate the input form with various input fields
 
   $messageInputForm.attr('onSubmit', 'return false'); // prevent the submit button from refreshing the page
 
