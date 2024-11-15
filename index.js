@@ -108,4 +108,5 @@ $(document).ready(() => {
   $tweetsContainer.css('background-color', 'green').css('margin', 'auto').css('margin-top', '10px').css('display', 'grid').css('width', '50%').css('border-radius', '30px');
   $('button').css('background-image', 'repeating-linear-gradient(45deg, rgb(150, 150, 150) 0px, black 30px, yellow 30px, maroon 60px)').css('margin-left', '20%').css('margin-bottom', '10px').width('20%').height('100px').css('border-style', 'solid').css('border-width', '10px').css('border-color', 'silver');
   $('.buttonChild').css('background-color', 'gray').css('font-size', '40px').css('font-family', 'serif').css('font-weight', 'bold').css('border-radius', '15px');
+  $('title').text('Garble');
 });
